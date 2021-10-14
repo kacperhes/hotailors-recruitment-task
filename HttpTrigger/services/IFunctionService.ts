@@ -9,7 +9,7 @@ export interface IAPIDataType {
 }
 
 export interface IFunctionService<T> {
-    processMessageAsync(message: T): Promise<string[]>;
+    processMessageAsync(message: T): Promise<{[pokemons: string]: string[]}>;
     getPokemonsFromAPIByType(type: string): Promise<IAPIDataType[]>;
     filterPokemonsByIds(pokemons: IAPIDataType[], ids: string): IAPIDataType[];
     getPokemonsNames(pokemons: IAPIDataType[]): string[];

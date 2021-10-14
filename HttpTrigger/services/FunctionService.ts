@@ -14,14 +14,14 @@ export class FunctionService implements IFunctionService<HttpRequestQuery> {
 
     private _pokemonesNames: string[];
 
-    public async processMessageAsync(query: HttpRequestQuery): Promise<string[]> {
+    public async processMessageAsync(query: HttpRequestQuery): Promise<{[pokemons: string]: string[]}> {
         this._logger.verbose(`${JSON.stringify(query)}`);
         const {id: idsStr, type} = query;
         const pokemonsByType: IAPIDataType[] = await this.getPokemonsFromAPIByType(type);
         const pokemonsFilteredByIds: IAPIDataType[] = this.filterPokemonsByIds(pokemonsByType, idsStr);
         this._pokemonesNames = this.getPokemonsNames(pokemonsFilteredByIds);
-        
-        return this._pokemonesNames;
+
+        return { pokemons: this._pokemonesNames };
     }
 
     public async getPokemonsFromAPIByType(type: string): Promise<IAPIDataType[]> {
@@ -33,7 +33,7 @@ export class FunctionService implements IFunctionService<HttpRequestQuery> {
     public filterPokemonsByIds(pokemons: IAPIDataType[], ids: string): IAPIDataType[] {
         if (ids === undefined) { return pokemons; } // In case of not providing ids
 
-        const pokemonsIds: string[] = _.split(ids, ",");
+        const pokemonsIds: string[] = _.split(ids, ",");        
         return _.filter(pokemons, (el: IAPIDataType) => _.includes(pokemonsIds, _.split(el.pokemon.url, "/")[6]));
     }
 
