@@ -17,8 +17,8 @@ export class FunctionService implements IFunctionService<HttpRequestQuery> {
     public async processMessageAsync(query: HttpRequestQuery): Promise<string[]> {
         this._logger.verbose(`${JSON.stringify(query)}`);
         const {id: idsStr, type} = query;
-        const pokemonsByType: any = await this.getPokemonsFromAPIByType(type);
-        const pokemonsFilteredByIds: any = this.filterPokemonsByIds(pokemonsByType, idsStr);
+        const pokemonsByType: IAPIDataType[] = await this.getPokemonsFromAPIByType(type);
+        const pokemonsFilteredByIds: IAPIDataType[] = this.filterPokemonsByIds(pokemonsByType, idsStr);
         this._pokemonesNames = this.getPokemonsNames(pokemonsFilteredByIds);
         
         return this._pokemonesNames;
@@ -38,6 +38,6 @@ export class FunctionService implements IFunctionService<HttpRequestQuery> {
     }
 
     public getPokemonsNames(pokemons: IAPIDataType[]): string[] {
-        return _.reduce(pokemons, (names: string[], el: IAPIDataType) => _.concat(names, el.pokemon.name), []);
+        return _.map(pokemons, (el: IAPIDataType) => el.pokemon.name);
     }
 }
