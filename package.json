@@ -1,0 +1,33 @@
+{
+  "name": "test-function",
+  "description": "",
+  "version": "",
+  "scripts": {
+    "prebuild": "npm run lint",
+    "build": "tsc",
+    "build:production": "npm run prestart && npm prune --production",
+    "watch": "tsc --w",
+    "prestart": "npm run build && func extensions install",
+    "start:host": "func start",
+    "start": "npm run start:host & npm run watch",
+    "test": "mocha -r ts-node/register tests/**/*.test.ts",
+    "lint": "tslint -c ./tslint/tslint.json --project ./tsconfig.json",
+    "lint:fix": "tslint -c ./tslint/tslint.json --project ./tsconfig.json --fix",
+    "lint:rebuild:rules": "tsc ./tslint/rules/underscorePrivatesRule.ts --lib \"es6\" && tsc ./tslint/rules/uppercaseStaticReadonlyRule.ts --lib \"es6\""
+  },
+  "dependencies": {
+    "axios": "^0.23.0",
+    "azure-storage": "^2.10.2",
+    "inversify": "^5.0.1",
+    "lodash": "^4.17.21",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@azure/functions": "^1.0.3",
+    "@types/axios": "^0.14.0",
+    "@types/node": "^16.10.9",
+    "ts-node": "^8.2.0",
+    "tslint": "^5.16.0",
+    "typescript": "^3.4.5"
+  }
+}
